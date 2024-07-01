@@ -14,14 +14,19 @@ Future<Uint8List> pdfBuilder() async {
 
        final pdf = pw.Document();
 
+int page = 850;
   // Load the images
 
 
- List.generate(1000, (index) => pdf.addPage(
+ List.generate(2000, (index) => pdf.addPage(
     Page(
       build: (context) {
+
+        if (index.isEven) {
+          page = page +1;
+        }
         
-         return pw.Stack(
+         return index.isEven ?pw.Stack(
           children: [
             // Background image
             pw.Positioned.fill(
@@ -32,7 +37,23 @@ Future<Uint8List> pdfBuilder() async {
               left: 375,
               top: 165,
               child: pw.Text(
-                "${850+index}",
+                "${page+index}",
+                style: pw.TextStyle(color: PdfColors.red, fontSize: 18,fontWeight:FontWeight.bold ,),
+              ),
+            ),
+          ],
+        ) :  pw.Stack(
+          children: [
+            // Background image
+            pw.Positioned.fill(
+              child: pw.Container(color: PdfColors.white),
+            ),
+            // Content on top of the background image
+            pw.Positioned(
+              left: 375,
+              top: 165,
+              child: pw.Text(
+                "${page+index}",
                 style: pw.TextStyle(color: PdfColors.red, fontSize: 18,fontWeight:FontWeight.bold ,),
               ),
             ),
