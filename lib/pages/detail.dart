@@ -34,6 +34,8 @@ TextEditingController countController = TextEditingController();
                             
                             if (count.toString().isEmpty) {
                               return "enter value";
+                            }if (double.tryParse(count??"") == null) {
+                              return 'Please enter a valid number';
                             }
                             return null;
                           },
@@ -65,14 +67,19 @@ TextEditingController countController = TextEditingController();
   Widget _fab(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
+
+        if (double.tryParse(countController.text) != null) {
+          
+    
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => PdfPreviewPage(count: countController.text,serial: serialController.text,),
           ),
         );
-        // rootBundle.
+            }
       },
       child: const Icon(Icons.picture_as_pdf),
     );
+
   }
 }
