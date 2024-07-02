@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pdf_gen/models/bill_model.dart';
+import 'package:flutter_pdf_gen/pages/custom_form.dart';
 import 'package:flutter_pdf_gen/pages/preview.dart';
 
 class DetailPage extends StatelessWidget {
   final BillModel singleBillItem;
-  const DetailPage({
+   DetailPage({
     Key? key,
     required this.singleBillItem,
   }) : super(key: key);
 
+TextEditingController countController = TextEditingController();
+  TextEditingController serialController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    
+
     return Scaffold(
       floatingActionButton: _fab(context),
       appBar: _buildAppBar(),
@@ -22,65 +27,26 @@ class DetailPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     return ListView(
       children: [
-        Card(
-          color: Colors.white,
-          margin: const EdgeInsets.all(12.0),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'Customer',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                Text(
-                  singleBillItem.customer,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Card(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              child: Column(
-                children: [
-                  Text(
-                    'Bill Details',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  ...singleBillItem.items.map(
-                    (e) => ListTile(
-                      title: Text(e.description),
-                      trailing: Text(
-                        e.cost.toStringAsFixed(2),
-                      ),
-                    ),
-                  ),
-                  DefaultTextStyle.merge(
-                    style: Theme.of(context).textTheme.headlineMedium,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text("Total"),
-                        Text(
-                          "\$${singleBillItem.totalCost().toStringAsFixed(2)}",
+ CustomFormfield(
+                          name: "Number",
+                          controller: countController,
+                          validator: (count) {
+                            
+                            if (count.toString().isEmpty) {
+                              return "enter value";
+                            }
+                            return null;
+                          },
+                          prefix: const Icon(Icons.numbers),
                         ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
+                        const Divider(),
+
+                        CustomFormfield(
+                          obscureText: false,
+                          name: "Serial",
+                          controller: serialController,
+                          prefix: const Icon(Icons.abc),
+                        ),        
       ],
     );
   }
@@ -101,7 +67,7 @@ class DetailPage extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => PdfPreviewPage(bill: singleBillItem),
+            builder: (context) => PdfPreviewPage(count: countController.text,serial: serialController.text,),
           ),
         );
         // rootBundle.

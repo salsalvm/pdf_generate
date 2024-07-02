@@ -5,8 +5,11 @@ import 'package:flutter_pdf_gen/models/bill_model.dart';
 import 'package:printing/printing.dart';
 
 class PdfPreviewPage extends StatelessWidget {
-  final BillModel bill;
-  const PdfPreviewPage({Key? key, required this.bill}) : super(key: key);
+  final String count;
+
+  final String serial;
+
+   PdfPreviewPage({Key? key, required this.count,required this.serial}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class PdfPreviewPage extends StatelessWidget {
         maxScale: 4,
         child: PdfPreview(
           loadingWidget: const CupertinoActivityIndicator(),
-          build: (context) => pdfBuilder(),
+          build: (context) => pdfBuilder(count,serial),
         ),
       ),
     );

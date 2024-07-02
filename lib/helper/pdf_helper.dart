@@ -6,13 +6,13 @@ import 'package:pdf/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart' as pw;
 
-Future<Uint8List> pdfBuilder() async {
+Future<Uint8List> pdfBuilder(String pageCount ,String serial) async {
   final image = MemoryImage(
       (await rootBundle.load('assets/arrows.jpg')).buffer.asUint8List());
 
   final pdf = pw.Document();
 
-  int page = 1100;
+  int page = int.parse(pageCount.isEmpty ?"0" :pageCount );
 
   List.generate(
     100,
@@ -36,7 +36,7 @@ Future<Uint8List> pdfBuilder() async {
                       left: 375,
                       top: 165,
                       child: pw.Text(
-                        "${page }",
+                        "$serial ${ page }",
                         style: pw.TextStyle(
                           color: PdfColors.red,
                           fontSize: 18,
@@ -55,7 +55,7 @@ Future<Uint8List> pdfBuilder() async {
                       left: 375,
                       top: 165,
                       child: pw.Text(
-                        "${page}",
+                         "$serial ${ page }",
                         style: pw.TextStyle(
                           color: PdfColors.red,
                           fontSize: 18,
