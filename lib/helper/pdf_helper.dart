@@ -2,66 +2,72 @@ import 'dart:typed_data';
 
 import 'package:pdf/pdf.dart';
 
-import '../../models/bill_model.dart';
 import 'package:pdf/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart' as pw;
-
 
 Future<Uint8List> pdfBuilder() async {
   final image = MemoryImage(
       (await rootBundle.load('assets/arrows.jpg')).buffer.asUint8List());
 
-       final pdf = pw.Document();
+  final pdf = pw.Document();
 
-int page = 850;
-  // Load the images
+  int page = 1100;
 
+  List.generate(
+    100,
+    (index) => pdf.addPage(
+      Page(
+        build: (context) {
 
- List.generate(2000, (index) => pdf.addPage(
-    Page(
-      build: (context) {
+          if (index.isEven) {
+            page = page + 1;
+          }
 
-        if (index.isEven) {
-          page = page +1;
-        }
-        
-         return index.isEven ?pw.Stack(
-          children: [
-            // Background image
-            pw.Positioned.fill(
-              child: pw.Image(image, fit: pw.BoxFit.cover),
-            ),
-            // Content on top of the background image
-            pw.Positioned(
-              left: 375,
-              top: 165,
-              child: pw.Text(
-                "${page+index}",
-                style: pw.TextStyle(color: PdfColors.red, fontSize: 18,fontWeight:FontWeight.bold ,),
-              ),
-            ),
-          ],
-        ) :  pw.Stack(
-          children: [
-            // Background image
-            pw.Positioned.fill(
-              child: pw.Container(color: PdfColors.white),
-            ),
-            // Content on top of the background image
-            pw.Positioned(
-              left: 375,
-              top: 165,
-              child: pw.Text(
-                "${page+index}",
-                style: pw.TextStyle(color: PdfColors.red, fontSize: 18,fontWeight:FontWeight.bold ,),
-              ),
-            ),
-          ],
-        );
-      },
+          return index.isEven
+              ? pw.Stack(
+                  children: [
+                    // Background image
+                    pw.Positioned.fill(
+                      child: pw.Image(image, fit: pw.BoxFit.cover),
+                    ),
+                    // Content on top of the background image
+                    pw.Positioned(
+                      left: 375,
+                      top: 165,
+                      child: pw.Text(
+                        "${page }",
+                        style: pw.TextStyle(
+                          color: PdfColors.red,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : pw.Stack(
+                  children: [
+                    pw.Positioned.fill(
+                      child: pw.Container(color: PdfColors.white),
+                    ),
+                    pw.Positioned(
+                      left: 375,
+                      top: 165,
+                      child: pw.Text(
+                        "${page}",
+                        style: pw.TextStyle(
+                          color: PdfColors.red,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+        },
+      ),
     ),
- ),
   );
   return pdf.save();
 }
