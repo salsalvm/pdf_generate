@@ -8,63 +8,57 @@ import 'package:pdf/widgets.dart' as pw;
 
 Future<Uint8List> pdfBuilder(String pageCount ,String serial) async {
   final image = MemoryImage(
-      (await rootBundle.load('assets/arrows.jpg')).buffer.asUint8List());
+      (await rootBundle.load('assets/arrows1.jpg')).buffer.asUint8List());
 
   final pdf = pw.Document();
 
-  int page = int.parse(pageCount.isEmpty ?"0" :pageCount );
-
   List.generate(
-    100,
+    50,
     (index) => pdf.addPage(
+
       Page(
+        pageFormat: PdfPageFormat.a4,
+        orientation: PageOrientation.landscape,
+        margin: EdgeInsets.zero,
+
         build: (context) {
 
-          if (index.isEven) {
-            page = page + 1;
-          }
+          
 
-          return index.isEven
-              ? pw.Stack(
+          return  pw.Stack(
                   children: [
-                    // Background image
                     pw.Positioned.fill(
                       child: pw.Image(image, fit: pw.BoxFit.cover),
                     ),
-                    // Content on top of the background image
                     pw.Positioned(
-                      left: 375,
-                      top: 165,
+                      left: 310,
+                      top: 157,
                       child: pw.Text(
-                        "$serial ${ page }",
+                        "$serial ${ int.parse(pageCount) + index +1 }",
+                     
                         style: pw.TextStyle(
                           color: PdfColors.red,
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  ],
-                )
-              : pw.Stack(
-                  children: [
-                    pw.Positioned.fill(
-                      child: pw.Container(color: PdfColors.white),
-                    ),
-                    pw.Positioned(
-                      left: 375,
-                      top: 165,
+                     pw.Positioned(
+                      left: 680,
+                      top: 157,
                       child: pw.Text(
-                         "$serial ${ page }",
+                        "$serial ${ int.parse(pageCount) + index +1 }",
+                     
                         style: pw.TextStyle(
                           color: PdfColors.red,
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 );
+              
         },
       ),
     ),
